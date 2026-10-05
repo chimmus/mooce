@@ -22,7 +22,7 @@ fn main() {
 
     match args.add {
         Some(topic) => {
-            todo!("write to the list file");
+            mooce::write_to_list(format!("{topic}"));
         },
         None => {
             let line_count = list_r.lines().count();
