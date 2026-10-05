@@ -1,6 +1,7 @@
 use clap::Parser;
 use rand::Rng;
 use std::fs;
+use std::io;
 
 // The following Rust code was hand written in a small town in Antarctica
 
@@ -26,10 +27,25 @@ fn main() {
         },
         None => {
             let line_count = list_r.lines().count();
-            let line = list_r.lines().nth(rand::thread_rng().gen_range(0..line_count));
+            let rand_line = rand::thread_rng().gen_range(0..line_count);
+            let line = list_r.lines().nth(rand_line);
             if let Some(e) = line {
                 // remove the some(" ") formatting from the text
                 println!("{e}");
+            }
+            println!("Complete this topic? (y/n)");
+            let mut prompt = String::new();
+            loop {
+                io::stdin().read_line(&mut prompt).expect("Failed to understand");
+                prompt = prompt.trim().to_lowercase();
+                if prompt.contains("y") {
+                    mooce::remove_line(rand_line).expect("An error occured");
+                    println!("Removed topic with id {rand_line}");
+                    break
+                } else {
+                    println!("You can find this again, the id of this is {:?}", rand_line);
+                    break
+                }
             }
         },
     }
