@@ -14,3 +14,9 @@ cd ~/mooce
 cargo build --release
 cargo install --path .
 ```
+
+# Use cases
+There are many ways to use `mooce`.
+Here are some ways:
+- using it as a todo list, you run "mooce" every time you want to do something productive
+- a "wheel" of names
