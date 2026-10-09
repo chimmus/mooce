@@ -24,7 +24,12 @@ fn main() {
     let list_r = fs::read_to_string(list_path).expect("There is no file at ~/.config/mooce called \"list\" , please add a file there");
 
     if args.list {
-        println!("{}", list_r);
+        // println!("{}", list_r);
+        let mut i: usize = 0;
+        for line in list_r.lines() {
+            println!("[{i}] {line}");
+            i += 1;
+        }
     } else {
         match args.add {
             Some(topic) => {
