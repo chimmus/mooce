@@ -24,24 +24,32 @@ fn main() {
     if args.list {
         // println!("{}", list_r);
         let mut i: usize = 0;
+        println!("────────────────────────");
         for line in list_r.lines() {
             println!("[{i}] {line}");
             i += 1;
         }
-    } else {
-        match args.add {
-            Some(topic) => {
-                let _ = mooce::write_to_list(format!("{topic}"));
-            },
-            None => {
+    }
+
+    match args.add {
+        Some(topic) => {
+            println!("────────────────────────");
+            let _ = mooce::write_to_list(format!("{topic}"));
+        },
+        None => {
+            if !args.list {
                 let line_count = list_r.lines().count();
                 if 1 > line_count {
+                    println!("────────────────────────");
                     println!("Your list is empty! Add topic to it with mooce -a <topic>");
                 } else {
+                    println!("────────────────────────");
                     mooce::print_r(line_count);
                 }
-            },
-        }
+            }
+        },
     }
+
+    println!("────────────────────────");
 
 }
