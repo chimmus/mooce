@@ -7,10 +7,15 @@ use std::fs;
 #[command(version, about, long_about = None)]
 
 struct Cli {
+    /// Add topic
     #[arg(short = 'a', long = "add", value_name = "topic")]
     add: Option<String>,
+    /// List
     #[arg(short = 'l', long = "list")]
     list: bool,
+    /// Delete entry at the index
+    #[arg(short = 'd', long = "delete", value_name = "index")]
+    del: Option<usize>,
 }
 
 
@@ -37,7 +42,7 @@ fn main() {
             let _ = mooce::write_to_list(format!("{topic}"));
         },
         None => {
-            if !args.list {
+            if !args.list && !args.del.is_some() {
                 let line_count = list_r.lines().count();
                 if 1 > line_count {
                     println!("────────────────────────");
@@ -48,6 +53,14 @@ fn main() {
                 }
             }
         },
+    }
+
+    match args.del {
+        Some(ln) => {
+            println!("────────────────────────");
+            mooce::delete_ln(ln);
+        },
+        _ => {},
     }
 
     println!("────────────────────────");

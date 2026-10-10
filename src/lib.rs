@@ -56,3 +56,16 @@ pub fn print_r(line_count: usize) {
         }
     }
 }
+
+pub fn delete_ln(line_number: usize) {
+    let list_path = shellexpand::tilde("~/.config/mooce/list").into_owned();
+    let list_r = fs::read_to_string(list_path).expect("There is no file at ~/.config/mooce called \"list\" , please add a file there");
+    let line_count = list_r.lines().count();
+    if line_number > line_count {
+        println!("{line_number} does not exist!");
+    } else {
+        remove_line(line_number).expect("Error occured while removing line");
+        println!("[{line_number}] has been removed"); // Not sure about how .expect works, 
+    }
+}
+
