@@ -31,6 +31,21 @@ pub fn remove_line(line_i: usize) -> std::io::Result<()> {
     Ok(())
 }
 
+pub fn print(ln: usize) {
+    let list_path = shellexpand::tilde("~/.config/mooce/list").into_owned();
+    let list_r = fs::read_to_string(list_path).expect("There is no file at ~/.config/mooce called \"list\" , please add a file there");
+
+    if ln > list_r.lines().count() {
+        println!("{ln} does not exist!");
+    } else {
+        let line = list_r.lines().nth(ln);
+        if let Some(e) = line {
+            println!("[{ln}] {e}")
+        }
+        rprompt(ln);
+    }
+}
+
 pub fn print_r(line_count: usize) {
     let list_path = shellexpand::tilde("~/.config/mooce/list").into_owned();
     let list_r = fs::read_to_string(list_path).expect("There is no file at ~/.config/mooce called \"list\" , please add a file there");
@@ -41,20 +56,7 @@ pub fn print_r(line_count: usize) {
         // remove the some(" ") formatting from the text
         println!("{e}");
     }
-    println!("Complete this topic? (y/n)");
-    let mut prompt = String::new();
-    loop {
-        io::stdin().read_line(&mut prompt).expect("Failed to understand");
-        prompt = prompt.trim().to_lowercase();
-        if prompt.contains("y") {
-            remove_line(rand_line).expect("An error occured");
-            println!("Removed topic with id {rand_line}");
-            break
-        } else {
-            println!("You can find this again, the id of this is {:?}", rand_line);
-            break
-        }
-    }
+    rprompt(rand_line);
 }
 
 pub fn delete_ln(line_number: usize) {
@@ -69,3 +71,19 @@ pub fn delete_ln(line_number: usize) {
     }
 }
 
+fn rprompt(ln: usize) {
+    println!("Complete this topic? (y/n)");
+    let mut prompt = String::new();
+    loop {
+        io::stdin().read_line(&mut prompt).expect("Failed to understand");
+        prompt = prompt.trim().to_lowercase();
+        if prompt.contains("y") {
+            remove_line(ln).expect("An error occured");
+            println!("Removed topic with id {ln}");
+            break
+        } else {
+            println!("You can find this again, the id of this is {:?}", ln);
+            break
+        }
+    }
+}
