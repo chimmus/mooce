@@ -4,8 +4,7 @@ use std::fs;
 use rand::Rng;
 use std::io;
 
-pub fn write_to_list(topic: String)  -> std::io::Result<()> {
-    let path = shellexpand::tilde("~/.config/mooce/list").into_owned();
+pub fn write_to_list(topic: String, path: String)  -> std::io::Result<()> {
     let mut list_w = File::options()
         .append(true)
         .create(true)
@@ -31,9 +30,7 @@ pub fn remove_line(line_i: usize) -> std::io::Result<()> {
     Ok(())
 }
 
-pub fn print(ln: usize) {
-    let list_path = shellexpand::tilde("~/.config/mooce/list").into_owned();
-    let list_r = fs::read_to_string(list_path).expect("There is no file at ~/.config/mooce called \"list\" , please add a file there");
+pub fn print(ln: usize, list_r: String) {
 
     if ln > list_r.lines().count() {
         println!("{ln} does not exist!");
