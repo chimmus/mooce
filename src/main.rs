@@ -57,10 +57,10 @@ fn main() {
     match args.add {
         Some(topic) => {
             println!("────────────────────────");
-            let _ = mooce::write_to_list(format!("{topic}"), path);
+            let _ = mooce::write_to_list(format!("{topic}"), &path);
         },
         None => {
-            if !args.list && !args.del.is_some() && !args.read.is_some() && !args.target.is_some() {
+            if !args.list && !args.del.is_some() && !args.read.is_some() {
                 let line_count = list_r.lines().count();
                 // really inefficient ^
                 if 1 > line_count {
@@ -68,7 +68,7 @@ fn main() {
                     println!("Your list is empty! Add topic to it with mooce -a <topic>");
                 } else {
                     println!("────────────────────────");
-                    mooce::print_r(line_count);
+                    mooce::print_r(line_count, &path);
                 }
             }
         },
@@ -77,7 +77,7 @@ fn main() {
     match args.del {
         Some(ln) => {
             println!("────────────────────────");
-            mooce::delete_ln(ln);
+            mooce::delete_ln(ln, &path);
         },
         _ => {},
     }
@@ -85,7 +85,7 @@ fn main() {
     match args.read {
         Some(ln) => {
             println!("────────────────────────");
-            mooce::print(ln, list_r);
+            mooce::print(ln, &path);
         },
         _ => {},
     }
