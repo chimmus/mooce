@@ -22,11 +22,28 @@ struct Cli {
     /// Which list file to target?
     #[arg(short = 't', long = "target", value_name = "file name")]
     target: Option<String>,
+    /// Create a list
+    #[arg(short = 'c', long = "create", value_name = "file name")]
+    create: Option<String>,
 }
 
 
 fn main() {
     let args = Cli::parse();
+
+    match args.create {
+        Some(ref file) => {
+            let check = format!("~/.config/mooce/{}", file);
+            let path_check = shellexpand::tilde(&check).into_owned();
+            if mooce::exist(&path_check) {
+                println!("There seems to be a file there with the same name");
+            } else {
+                let _ = fs::File::create(&path_check);
+                println!("File successfully created!");
+            }
+        },
+        None => {},
+    }
 
     let (list_r, path) = match args.target {
         Some(ref file) => {
@@ -34,6 +51,8 @@ fn main() {
             let path_check = shellexpand::tilde(&path).into_owned();
             let list_r = fs::read_to_string(&path_check)
                 .expect("The file you requested was not found, please add a file there");
+            println!("────────────────────────");
+            println!("Targetting {file}");
             (list_r, path_check)
         },
         None => {
@@ -60,7 +79,7 @@ fn main() {
             let _ = mooce::write_to_list(format!("{topic}"), &path);
         },
         None => {
-            if !args.list && !args.del.is_some() && !args.read.is_some() {
+            if !args.list && !args.del.is_some() && !args.read.is_some() && !args.create.is_some() {
                 let line_count = list_r.lines().count();
                 // really inefficient ^
                 if 1 > line_count {

@@ -81,3 +81,11 @@ fn rprompt(ln: usize, path: &String) {
         }
     }
 }
+
+pub fn exist(path: &String) -> bool {
+    match fs::exists(path) {
+        Ok(true) => true,
+        Ok(false) => false,
+        Err(_) => false,
+    }
+}
