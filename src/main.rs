@@ -16,6 +16,9 @@ struct Cli {
     /// Delete entry at the index
     #[arg(short = 'd', long = "delete", value_name = "index")]
     del: Option<usize>,
+    /// Delete entire list (no confirmation)
+    #[arg(short = 'D', long = "delete-list", value_name = "file name")]
+    dell: Option<String>,
     /// Read entry at index
     #[arg(short = 'r', long = "read", value_name = "index")]
     read: Option<usize>,
@@ -30,6 +33,27 @@ struct Cli {
 
 fn main() {
     let args = Cli::parse();
+
+    match args.dell {
+        Some(ref file) => {
+            let check = format!("~/.config/mooce/{}", file);
+            let path_check = shellexpand::tilde(&check).into_owned();
+            if !mooce::exist(&path_check) {
+                println!("The file didn't exist so we didn't need to do anything");
+            } else {
+                let success = match fs::remove_file(&path_check) {
+                    Ok(()) => true,
+                    Err(_) => false,
+                };
+                if success {
+                    println!("File successfully deleted!");
+                } else {
+                    println!("Error occured")
+                }
+            }
+        },
+        None => {},
+    }
 
     match args.create {
         Some(ref file) => {
@@ -79,7 +103,7 @@ fn main() {
             let _ = mooce::write_to_list(format!("{topic}"), &path);
         },
         None => {
-            if !args.list && !args.del.is_some() && !args.read.is_some() && !args.create.is_some() {
+            if !args.list && !args.del.is_some() && !args.read.is_some() && !args.create.is_some() && !args.dell.is_some() {
                 let line_count = list_r.lines().count();
                 // really inefficient ^
                 if 1 > line_count {
