@@ -1,9 +1,8 @@
 # mooce
 
-mooce is designed to be a list. You can add stuff to it and get random things back.
-There are many use cases.
+mooce is designed to be a list. It is very unintuitive to use.
 
-# Building
+## Building
 Clone the git repo.
 ```bash
 git clone https://github.com/chimmus/mooce.git ~/mooce
@@ -14,8 +13,27 @@ cd ~/mooce
 cargo build --release
 cargo install --path .
 ```
+## Utilities
+You can run `mooce -h`:
+```
+An unintuitive list
 
-# Use cases
+Usage: mooce [OPTIONS]
+
+Options:
+  -a, --add <topic>              Add topic
+  -l, --list                     List
+  -d, --delete <index>           Delete entry at the index
+  -D, --delete-list <file name>  Delete entire list (no confirmation)
+  -r, --read <index>             Read entry at index
+  -t, --target <file name>       Which list file to target?
+  -c, --create <file name>       Create a list
+  -h, --help                     Print help
+  -V, --version                  Print version
+```
+More will be added in the future. `-t` is important when you want to use a different list than the default (ability to choose defaults is on its way).
+
+## Use cases
 There are many ways to use `mooce`.
 Here are some ways:
 - using it as a todo list, you run "mooce" every time you want to do something productive
