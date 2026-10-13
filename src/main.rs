@@ -13,6 +13,9 @@ struct Cli {
     /// List
     #[arg(short = 'l', long = "list")]
     list: bool,
+    /// List all lists
+    #[arg(short = 'L', long = "list-file")]
+    listf: bool,
     /// Delete entry at the index
     #[arg(short = 'd', long = "delete", value_name = "index")]
     del: Option<usize>,
@@ -57,13 +60,17 @@ fn main() {
 
     match args.create {
         Some(ref file) => {
-            let check = format!("~/.config/mooce/{}", file);
-            let path_check = shellexpand::tilde(&check).into_owned();
-            if mooce::exist(&path_check) {
-                println!("There seems to be a file there with the same name");
+            if file.contains(".") {
+                println!("Unfortunately mooce wont allow this, we do not permit . inside of the list name");
             } else {
-                let _ = fs::File::create(&path_check);
-                println!("File successfully created!");
+                let check = format!("~/.config/mooce/{}", file);
+                let path_check = shellexpand::tilde(&check).into_owned();
+                if mooce::exist(&path_check) {
+                    println!("There seems to be a file there with the same name");
+                } else {
+                    let _ = fs::File::create(&path_check);
+                    println!("File successfully created!");
+                }
             }
         },
         None => {},
@@ -73,11 +80,19 @@ fn main() {
         Some(ref file) => {
             let path = format!("~/.config/mooce/{}", file);
             let path_check = shellexpand::tilde(&path).into_owned();
-            let list_r = fs::read_to_string(&path_check)
-                .expect("The file you requested was not found, please add a file there");
-            println!("────────────────────────");
-            println!("Targetting {file}");
-            (list_r, path_check)
+            if mooce::exist(&path_check) {
+                let list_r = fs::read_to_string(&path_check)
+                    .expect("The file you requested was not found, please add a file there");
+                println!("────────────────────────");
+                println!("Targetting {file}");
+                (list_r, path_check)
+            } else {
+                let list_path = shellexpand::tilde("~/.config/mooce/list").into_owned();
+                let list_r = fs::read_to_string(&list_path)
+                    .expect("There is no file at ~/.config/mooce called \"list\" , please add a file there");
+
+                (list_r, path_check)
+            }
         },
         None => {
             let list_path = shellexpand::tilde("~/.config/mooce/list").into_owned();
@@ -97,13 +112,18 @@ fn main() {
         }
     }
 
+    if args.listf {
+        println!("────────────────────────");
+        mooce::ls();
+    }
+
     match args.add {
         Some(topic) => {
             println!("────────────────────────");
             let _ = mooce::write_to_list(format!("{topic}"), &path);
         },
         None => {
-            if !args.list && !args.del.is_some() && !args.read.is_some() && !args.create.is_some() && !args.dell.is_some() {
+            if !args.list && !args.del.is_some() && !args.read.is_some() && !args.create.is_some() && !args.dell.is_some() && !args.listf {
                 let line_count = list_r.lines().count();
                 // really inefficient ^
                 if 1 > line_count {

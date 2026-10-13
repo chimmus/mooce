@@ -89,3 +89,14 @@ pub fn exist(path: &String) -> bool {
         Err(_) => false,
     }
 }
+
+pub fn ls() {
+    let path_c = shellexpand::tilde("~/.config/mooce/").into_owned();
+    for path in fs::read_dir(&path_c).expect("an error occured") {
+        let path_e = path.expect("Could not read entry");
+        let path_c = path_e.file_name().to_string_lossy().into_owned();
+        if !path_c.contains(".") {
+            println!("{}", path_c);
+        }
+    }
+}
