@@ -1,9 +1,8 @@
 mod utils;
 
 use clap::Parser;
-use std::fs;
 use rand::Rng;
-use utils::{display::{show, ls}, update::{write_list}, delete::*, misc::exist};
+use utils::{display::{show, ls}, update::{write_list}, delete::*, create::*, misc::*};
 
 // The following Rust code was hand written in a small town in Antarctica
 
@@ -41,71 +40,9 @@ struct Cli {
 fn main() {
     let args = Cli::parse();
 
-    match args.dell {
-        Some(ref file) => {
-            let check = format!("~/.config/mooce/{}", file);
-            let path_check = shellexpand::tilde(&check).into_owned();
-            if !exist(&path_check) {
-                println!("The file didn't exist so we didn't need to do anything");
-            } else {
-                let success = match fs::remove_file(&path_check) {
-                    Ok(()) => true,
-                    Err(_) => false,
-                };
-                if success {
-                    println!("File successfully deleted!");
-                } else {
-                    println!("Error occured")
-                }
-            }
-        },
-        None => {},
-    }
-
-    match args.create {
-        Some(ref file) => {
-            if file.contains(".") {
-                println!("Unfortunately mooce wont allow this, we do not permit . inside of the list name");
-            } else {
-                let check = format!("~/.config/mooce/{}", file);
-                let path_check = shellexpand::tilde(&check).into_owned();
-                if exist(&path_check) {
-                    println!("There seems to be a file there with the same name");
-                } else {
-                    let _ = fs::File::create(&path_check);
-                    println!("File successfully created!");
-                }
-            }
-        },
-        None => {},
-    }
-
-    let (list_r, path) = match args.target {
-        Some(ref file) => {
-            let path = format!("~/.config/mooce/{}", file);
-            let path_check = shellexpand::tilde(&path).into_owned();
-            if exist(&path_check) {
-                let list_r = fs::read_to_string(&path_check)
-                    .expect("The file you requested was not found, please add a file there");
-                println!("────────────────────────");
-                println!("Targetting {file}");
-                (list_r, path_check)
-            } else {
-                let path_check = shellexpand::tilde("~/.config/mooce/list").into_owned();
-                println!("Unfortunately the file you requested doesn't exist");
-                let list_r = fs::read_to_string(&path_check)
-                    .expect("There is no file at ~/.config/mooce called \"list\" , please add a file there");
-
-                (list_r, path_check)
-            }
-        },
-        None => {
-            let list_path = shellexpand::tilde("~/.config/mooce/list").into_owned();
-            let list_r = fs::read_to_string(&list_path)
-                .expect("There is no file at ~/.config/mooce called \"list\" , please add a file there");
-            (list_r, list_path)
-        },
-    };
+    rmr(&args.dell);
+    make(&args.create);
+    let (list_r, path) = target(&args.target);
 
     if args.list {
         // println!("{}", list_r);

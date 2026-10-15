@@ -2,15 +2,21 @@ use std::{io, fs};
 use super::delete::remove;
 
 pub fn show(ln: usize, path: &String) {
-    let list_r = fs::read_to_string(&path).expect("File requested was not found");
-    if ln > list_r.lines().count() {
-        println!("{ln} does not exist!");
-    } else {
-        let line = list_r.lines().nth(ln);
-        if let Some(e) = line {
-            println!("[{ln}] {e}")
-        }
-        rprompt(ln, &path);
+    match fs::read_to_string(&path) {
+        Ok(list_r) => {
+            if ln > list_r.lines().count() {
+                println!("{ln} does not exist!");
+            } else {
+                let line = list_r.lines().nth(ln);
+                if let Some(e) = line {
+                    println!("[{ln}] {e}")
+                }
+                rprompt(ln, &path);
+            }
+        },
+        Err(error) => {
+            println!("an error occured {error}");
+        },
     }
 }
 
