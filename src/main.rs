@@ -1,5 +1,9 @@
+mod utils;
+
 use clap::Parser;
 use std::fs;
+use rand::Rng;
+use utils::{display::{show, ls}, update::{write_list}};
 
 // The following Rust code was hand written in a small town in Antarctica
 
@@ -115,13 +119,13 @@ fn main() {
 
     if args.listf {
         println!("────────────────────────");
-        mooce::ls();
+        ls();
     }
 
     match args.add {
         Some(topic) => {
             println!("────────────────────────");
-            let _ = mooce::write_to_list(format!("{topic}"), &path);
+            let _ = write_list(format!("{topic}"), &path);
         },
         None => {
             if !args.list && !args.del.is_some() && !args.read.is_some() && !args.create.is_some() && !args.dell.is_some() && !args.listf {
@@ -132,7 +136,7 @@ fn main() {
                     println!("Your list is empty! Add topic to it with mooce -a <topic>");
                 } else {
                     println!("────────────────────────");
-                    mooce::print_r(line_count, &path);
+                    show(rand::thread_rng().gen_range(0..line_count), &path);
                 }
             }
         },
@@ -149,7 +153,7 @@ fn main() {
     match args.read {
         Some(ln) => {
             println!("────────────────────────");
-            mooce::print(ln, &path);
+            show(ln, &path);
         },
         _ => {},
     }
