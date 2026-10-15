@@ -4,6 +4,10 @@ use std::fs;
 use rand::Rng;
 use std::io;
 
+pub mod utils;
+
+use utils::delete::remove;
+
 pub fn write_to_list(topic: String, path: &String)  -> std::io::Result<()> {
     let mut list_w = File::options()
         .append(true)
@@ -14,20 +18,6 @@ pub fn write_to_list(topic: String, path: &String)  -> std::io::Result<()> {
     Ok(())
 }
 
-pub fn remove_line(line_i: usize, path: &String) -> std::io::Result<()> {
-    let list_w = fs::read_to_string(&path)?;
-    let mut lines: Vec<String> = list_w.lines().map(String::from).collect();
-    if line_i < lines.len() {
-        lines.remove(line_i);
-    }
-    let mut out = lines.join("\n");
-    if !out.is_empty() {
-        out.push('\n');
-    }
-    fs::write(&path, out)?;
-
-    Ok(())
-}
 
 pub fn print(ln: usize, path: &String) {
     let list_r = fs::read_to_string(&path).expect("File requested was not found");
@@ -55,12 +45,13 @@ pub fn print_r(line_count: usize, list_path: &String) {
 }
 
 pub fn delete_ln(line_number: usize, list_path: &String) {
+    // This delete is more expressive
     let list_r = fs::read_to_string(&list_path).expect("File requested was not found");
     let line_count = list_r.lines().count();
     if line_number > (line_count - 1) {
         println!("{line_number} does not exist!");
     } else {
-        remove_line(line_number, &list_path).expect("Error occured while removing line");
+        remove(line_number, &list_path).expect("Error occured while removing line");
         println!("[{line_number}] has been removed"); // Not sure about how .expect works, 
     }
 }
@@ -72,7 +63,7 @@ fn rprompt(ln: usize, path: &String) {
         io::stdin().read_line(&mut prompt).expect("Failed to understand");
         prompt = prompt.trim().to_lowercase();
         if prompt.contains("y") {
-            remove_line(ln, &path).expect("An error occured");
+            remove(ln, &path).expect("An error occured");
             println!("Removed topic with id {ln}");
             break
         } else {
