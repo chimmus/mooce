@@ -46,5 +46,5 @@ More features will be added in the future.
 ## Use cases
 There are many ways to use `mooce`.
 Here are some ways:
-- using it as a todo list, you run "mooce" every time you want to do something productive
+- using it as a todo list, you run `mooce` every time you want to do something productive
 - a "wheel" of names
