@@ -3,7 +3,7 @@ mod utils;
 use clap::Parser;
 use std::fs;
 use rand::Rng;
-use utils::{display::{show, ls}, update::{write_list}};
+use utils::{display::{show, ls}, update::{write_list}, delete::*, misc::exist};
 
 // The following Rust code was hand written in a small town in Antarctica
 
@@ -45,7 +45,7 @@ fn main() {
         Some(ref file) => {
             let check = format!("~/.config/mooce/{}", file);
             let path_check = shellexpand::tilde(&check).into_owned();
-            if !mooce::exist(&path_check) {
+            if !exist(&path_check) {
                 println!("The file didn't exist so we didn't need to do anything");
             } else {
                 let success = match fs::remove_file(&path_check) {
@@ -69,7 +69,7 @@ fn main() {
             } else {
                 let check = format!("~/.config/mooce/{}", file);
                 let path_check = shellexpand::tilde(&check).into_owned();
-                if mooce::exist(&path_check) {
+                if exist(&path_check) {
                     println!("There seems to be a file there with the same name");
                 } else {
                     let _ = fs::File::create(&path_check);
@@ -84,7 +84,7 @@ fn main() {
         Some(ref file) => {
             let path = format!("~/.config/mooce/{}", file);
             let path_check = shellexpand::tilde(&path).into_owned();
-            if mooce::exist(&path_check) {
+            if exist(&path_check) {
                 let list_r = fs::read_to_string(&path_check)
                     .expect("The file you requested was not found, please add a file there");
                 println!("────────────────────────");
@@ -145,7 +145,7 @@ fn main() {
     match args.del {
         Some(ln) => {
             println!("────────────────────────");
-            mooce::delete_ln(ln, &path);
+            delete_ln(ln, &path);
         },
         _ => {},
     }
