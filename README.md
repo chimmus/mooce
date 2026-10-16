@@ -1,6 +1,10 @@
-# mooce
+# mooce 
+  [![rust]][rustw]
+  [![github]][repo]
+  [![wbadge]][wiki]
 
-mooce is designed to be a list. It is very unintuitive to use.
+
+mooce is designed to be a list. It is very unintuitive to use. 💤
 
 ## Building
 Clone the git repo.
@@ -48,3 +52,13 @@ There are many ways to use `mooce`.
 Here are some ways:
 - using it as a todo list, you run `mooce` every time you want to do something productive
 - a "wheel" of names
+
+<!---------------------------------[ Internal ]-------------------------------->
+[repo]: https://github.com/chimmus/mooce
+[wiki]: https://github.com/chimmus/mooce/wiki
+[rustw]: https://rust-lang.org/
+
+<!----------------------------------[ Badges ]--------------------------------->
+[rust]: https://img.shields.io/badge/made%20with-Rust-orange?logo=rust&style=flat-square
+[github]: https://img.shields.io/badge/GitHub-Repo-green?logo=github&style=flat-square
+[wbadge]: https://img.shields.io/badge/Wiki-+-blue?logo=mdbook&style=flat-square
