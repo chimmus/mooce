@@ -1,8 +1,7 @@
 mod utils;
 
 use clap::Parser;
-use rand::Rng;
-use utils::{display::{show, ls}, update::{write_list}, delete::*, create::*, misc::*};
+use utils::{display::{show, ls, rprompt}, update::{write_list}, delete::*, create::*, misc::*, bundle::*};
 
 // The following Rust code was hand written in a small town in Antarctica
 
@@ -65,16 +64,14 @@ fn main() {
             let _ = write_list(format!("{topic}"), &path);
         },
         None => {
-            if !args.list && !args.del.is_some() && !args.read.is_some() && !args.create.is_some() && !args.dell.is_some() && !args.listf {
+            if !args.list && !args.del.is_some() 
+            && !args.read.is_some() 
+            && !args.create.is_some() 
+            && !args.dell.is_some() 
+            && !args.listf {
                 let line_count = list_r.lines().count();
                 // really inefficient ^
-                if 1 > line_count {
-                    println!("────────────────────────");
-                    println!("Your list is empty! Add topic to it with mooce -a <topic>");
-                } else {
-                    println!("────────────────────────");
-                    show(rand::thread_rng().gen_range(0..line_count), &path);
-                }
+                default_rand(line_count, &path);
             }
         },
     }
@@ -90,7 +87,14 @@ fn main() {
     match args.read {
         Some(ln) => {
             println!("────────────────────────");
-            show(ln, &path);
+            let (output, success) = show(ln, &path);
+            if success {
+                println!("{}", output);
+                rprompt(ln, &path);
+
+            } else {
+                println!("ERROR! {output}");
+            }
         },
         _ => {},
     }

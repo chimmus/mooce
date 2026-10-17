@@ -1,27 +1,33 @@
 use std::{io, fs};
 use super::delete::remove;
+use super::misc::exist;
 
-pub fn show(ln: usize, path: &String) {
-    match fs::read_to_string(&path) {
-        Ok(list_r) => {
-            if ln > list_r.lines().count() {
-                println!("{ln} does not exist!");
-            } else {
-                let line = list_r.lines().nth(ln);
-                if let Some(e) = line {
-                    println!("[{ln}] {e}")
+pub fn show(ln: usize, path: &String) -> (String, bool) {
+    if exist(&path){
+        match fs::read_to_string(&path) {
+            Ok(list_r) => {
+                if ln > list_r.lines().count() {
+                    (format!("{ln} does not exist!"), false)
+                } else {
+                    let line = list_r.lines().nth(ln);
+                    if let Some(e) = line {
+                        (format!("[{}] {}", ln, e), true)
+                    } else {
+                        (format!("unknown error occured"), true)
+                    }
                 }
-                rprompt(ln, &path);
-            }
-        },
-        Err(error) => {
-            println!("an error occured {error}");
-        },
+            },
+            Err(error) => {
+                (format!("an error occured {error}"), false)
+            },
+        }
+    } else {
+        (format!("list doesnt exist!"), false)
     }
 }
 
 
-fn rprompt(ln: usize, path: &String) {
+pub fn rprompt(ln: usize, path: &String) {
     println!("Complete this topic? (y/n)");
     let mut prompt = String::new();
     loop {
@@ -48,3 +54,4 @@ pub fn ls() {
         }
     }
 }
+
