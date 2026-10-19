@@ -39,6 +39,12 @@ struct Cli {
 fn main() {
     let args = Cli::parse();
 
+    /*
+        In order:
+        Processes the deletion of files
+        Processes creation of files
+        Processes the list's path and length, can be modified with the --target flag
+     */
     rmr(&args.dell);
     make(&args.create);
     let (list_r, path) = target(&args.target);
@@ -64,6 +70,13 @@ fn main() {
             let _ = write_list(format!("{topic}"), &path);
         },
         None => {
+            /* 
+                Default behaviour of program without any flags
+                However, the --target flag does not count towards
+                this and will activate this
+
+                Plan to add functionality to not make this a default
+             */
             if !args.list && !args.del.is_some() 
             && !args.read.is_some() 
             && !args.create.is_some() 
@@ -76,6 +89,8 @@ fn main() {
         },
     }
 
+
+    // Parsing the delete flag
     match args.del {
         Some(ln) => {
             println!("────────────────────────");
@@ -84,6 +99,7 @@ fn main() {
         _ => {},
     }
 
+    // Read the line at index
     match args.read {
         Some(ln) => {
             println!("────────────────────────");
