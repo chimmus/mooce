@@ -3,6 +3,7 @@ use super::delete::remove;
 use super::misc::exist;
 
 pub fn show(ln: usize, path: &String) -> (String, bool) {
+    // the returned tuple contains the output of the program and whether or not errors
     if exist(&path){
         match fs::read_to_string(&path) {
             Ok(list_r) => {

@@ -1,6 +1,9 @@
 use super::display::*;
 use rand::Rng;
 
+/* A bundle of the display::show function combined with RNG, 
+this is used in the uh default utility
+of the program */
 pub fn default_rand(line_count: usize, path: &String) {
     if 1 > line_count {
         println!("────────────────────────");
