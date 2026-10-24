@@ -6,14 +6,15 @@ use utils::{display::{show, ls, rprompt}, update::{write_list}, delete::*, creat
 // The following Rust code was hand written in a small town in Antarctica
 
 #[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
+#[command(version, about, long_about = "
+mooce is quite unintuitive to use. There is no set way to use it.\nThe program comes with a few basic utilities and is probably quite slow")]
 
 struct Cli {
     /// Add topic
-    #[arg(short = 'a', long = "add", value_name = "topic")]
+    #[arg(short = 'a', long = "add", value_name = "topic", long_help = "Add topic to the targetted list")]
     add: Option<String>,
     /// List
-    #[arg(short = 'l', long = "list")]
+    #[arg(short = 'l', long = "list", long_help = "List entries in the targtted list")]
     list: bool,
     /// List all lists
     #[arg(short = 'L', long = "list-file")]

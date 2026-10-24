@@ -24,24 +24,6 @@ pub fn remove(line_i: usize, path: &String) -> std::io::Result<()> {
     Ok(())
 }
 
-pub fn delete_ln(line_number: usize, path: &String) {
-    // This delete is more expressive
-    match std::fs::read_to_string(&path) {
-        Ok(list_r) => {
-            let line_count = list_r.lines().count();
-            if line_number > (line_count - 1) {
-                println!("{line_number} does not exist!");
-            } else {
-                remove(line_number, &path).expect("Error occured while removing line");
-                println!("[{line_number}] has been removed"); // Not sure about how .expect works, 
-            }
-        },
-        Err(error) => {
-            println!("Unexpected error occured {error}");
-        },
-    }
-}
-
 pub fn rmr(target: &Option<String>) {
     match target {
         Some(file) => {
