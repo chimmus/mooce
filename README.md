@@ -53,6 +53,17 @@ Here are some ways:
 - using it as a todo list, you run `mooce` every time you want to do something productive
 - a "wheel" of names
 
+## Config
+You can create a config file named `~/.config/mooce/mooce.conf`.
+There is currently 1 option:
+```
+default=work
+// This makes the default list "work"
+```
+Currently, there are issues with lists with spaces in their names. The program will fallback to `~/.config/mooce/list` if there is no default list selected.
+```
+```
+
 <!---------------------------------[ Internal ]-------------------------------->
 [repo]: https://github.com/chimmus/mooce
 [wiki]: https://github.com/chimmus/mooce/wiki
