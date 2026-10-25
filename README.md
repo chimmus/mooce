@@ -61,8 +61,6 @@ default=work
 // This makes the default list "work"
 ```
 Currently, there are issues with lists with spaces in their names. The program will fallback to `~/.config/mooce/list` if there is no default list selected.
-```
-```
 
 <!---------------------------------[ Internal ]-------------------------------->
 [repo]: https://github.com/chimmus/mooce
