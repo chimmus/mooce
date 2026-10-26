@@ -19,6 +19,7 @@ cd ~/mooce
 cargo build --release
 cargo install --path .
 ```
+You can also get it from [crates.io](https://crates.io/crates/mooce).
 ## Utilities
 You can run `mooce -h`:
 ```
