@@ -50,15 +50,7 @@ fn main() {
     make(&args.create);
     let (list_r, path) = target(&args.target);
 
-    if args.list {
-        // println!("{}", list_r);
-        let mut i: usize = 0;
-        println!("────────────────────────");
-        for line in list_r.lines() {
-            println!("[{i}] {line}");
-            i += 1;
-        }
-    }
+    list_entries(args.list, &list_r);
 
     if args.listf {
         println!("────────────────────────");
@@ -118,4 +110,16 @@ fn main() {
 
     println!("────────────────────────");
 
+}
+
+fn list_entries(list: bool, list_r: &str) {
+    if list {
+        // println!("{}", list_r);
+        let mut output = String::new();
+        print!("────────────────────────");
+        for (i, line) in list_r.lines().enumerate() {
+            output += &format!("\n[{i}] {line}");
+        }
+        println!("{output}");
+    }
 }
