@@ -7,7 +7,7 @@
 mooce is designed to be a list. It is very unintuitive to use. 💤
 
 ## Building
-Tested with `cargo 1.97.1` on Apple Silicon™
+Tested with `cargo 1.97.1` on Apple Silicon™.
 Clone the git repo.
 ```bash
 git clone https://github.com/chimmus/mooce.git ~/mooce
