@@ -1,5 +1,6 @@
 use std::fs;
 use super::readc::conf::*;
+use super::create::*;
 
 pub fn exist(path: &String) -> bool {
     match fs::exists(path) {
@@ -37,9 +38,17 @@ pub fn target(target: &Option<String>) -> (String, String) {
                 (list_r, list_path)
             } else {
                 let list_path = shellexpand::tilde("~/.config/mooce/list").into_owned();
-                let list_r = fs::read_to_string(&list_path)
-                    .expect("There is no file at ~/.config/mooce called list , please add a file there");
-                (list_r, list_path)
+                if exist(&list_path) {
+                    let list_r = fs::read_to_string(&list_path)
+                        .expect("There is no file at ~/.config/mooce called list , please add a file there");
+                    (list_r, list_path)
+                } else {
+                    make(&Some(String::from("list")));
+                    let list_path = shellexpand::tilde("~/.config/mooce/list").into_owned();
+                    let list_r = fs::read_to_string(&list_path)
+                        .expect("There is no file at ~/.config/mooce called list , please add a file there");
+                    (list_r, list_path)
+                }
             }
         },
     }

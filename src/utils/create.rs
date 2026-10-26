@@ -12,8 +12,13 @@ pub fn make(file_name: &Option<String>) {
                 if exist(&path_check) {
                     println!("There seems to be a file there with the same name");
                 } else {
-                    let _ = fs::File::create(&path_check);
-                    println!("File successfully created!");
+                    let parent = shellexpand::tilde("~/.config/mooce/").into_owned();
+                    fs::create_dir_all(&parent).expect("Could not create ~/.config/mooce");
+
+                    match fs::File::create(&path_check) {
+                        Ok(_) => println!("File successfully created!"),
+                        Err(errpr) => println!("error: {errpr}"),
+                    }
                 }
             }
         },
