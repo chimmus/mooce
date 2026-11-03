@@ -81,4 +81,4 @@ Currently, the environment variable supports `~`.
 [rust]: https://img.shields.io/badge/made%20with-Rust-orange?logo=rust&style=flat-square
 [github]: https://img.shields.io/badge/GitHub-Repo-green?logo=github&style=flat-square
 [wbadge]: https://img.shields.io/badge/Wiki-+-blue?logo=mdbook&style=flat-square
-[crate_download]: https://img.shields.io/crates/dv/mooce/0.1.8?style=for-the-badge&logo=rust
+[crate_download]: https://img.shields.io/crates/dv/mooce/0.1.8?style=flat-square&logo=rust
