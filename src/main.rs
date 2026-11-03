@@ -1,4 +1,4 @@
-mod utils;
+pub mod utils;
 
 use clap::Parser;
 use utils::{display::{show, ls, rprompt}, update::{write_list}, delete::*, create::*, misc::*, bundle::*, readc::env::detect};
@@ -52,13 +52,13 @@ fn main() {
         Processes the list's path and length, can be modified with the --target flag
      */
 
-    let (mpath, chdef) = detect();
+    let (mpath, _) = detect();
     rmr(&args.dell, &mpath);
     make(&args.create, &mpath);
-    let (list_r, path) = target(&args.target, &mpath);
+    let (list_r, path) = target(&args.target, &mpath, args.verbose);
 
     if args.verbose {
-        println!("{mpath}");
+        println!("Default path is: {mpath}");
     }
 
     list_entries(args.list, &list_r);

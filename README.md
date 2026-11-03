@@ -2,6 +2,7 @@
   [![rust]][rustw]
   [![github]][repo]
   [![wbadge]][wiki]
+  [![crate_download]][crate]
 
 
 mooce is designed to be a list. It is very unintuitive to use. 💤
@@ -36,6 +37,7 @@ Options:
   -r, --read <index>             Read entry at index
   -t, --target <file name>       Which list file to target?
   -c, --create <file name>       Create a list
+  -v, --verbose                  Verbose
   -h, --help                     Print help
   -V, --version                  Print version
 ```
@@ -60,17 +62,23 @@ Here are some ways:
 You can create a config file named `~/.config/mooce/mooce.conf`.
 There is currently 1 option:
 ```
-default=work
-// This makes the default list "work"
+default=<list name>
 ```
 Currently, there are issues with lists with spaces in their names. The program will fallback to `~/.config/mooce/list` if there is no default list selected.
+You can also set an environment variable to change the location `mooce` checks for lists. 
+```bash
+$ echo 'export MPATH="<dir path>"' >> ~/.bashrc 
+```
+Currently, the environment variable supports `~`.
 
 <!---------------------------------[ Internal ]-------------------------------->
 [repo]: https://github.com/chimmus/mooce
 [wiki]: https://github.com/chimmus/mooce/wiki
 [rustw]: https://rust-lang.org/
+[crate]: https://crates.io/crates/mooce
 
 <!----------------------------------[ Badges ]--------------------------------->
 [rust]: https://img.shields.io/badge/made%20with-Rust-orange?logo=rust&style=flat-square
 [github]: https://img.shields.io/badge/GitHub-Repo-green?logo=github&style=flat-square
 [wbadge]: https://img.shields.io/badge/Wiki-+-blue?logo=mdbook&style=flat-square
+[crate_download]: https://img.shields.io/crates/dv/mooce/0.1.8?style=for-the-badge&logo=rust
