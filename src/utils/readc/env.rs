@@ -4,8 +4,11 @@ use super::super::misc::*;
 pub fn detect() -> (String, bool) {
     match env::var("MPATH") {
         Ok(path) => {
-            let path_dir = shellexpand::tilde(&path).into_owned();
+            let mut path_dir = shellexpand::tilde(&path).into_owned();
             if check_dir(&path_dir) && exist(&path_dir) {
+                if !path_dir.ends_with('/') {
+                    path_dir.push_str("/");
+                }
                 (path_dir, false)
             } else { 
                 (default(), true)
@@ -18,6 +21,6 @@ pub fn detect() -> (String, bool) {
 }
 
 fn default() -> String {
-    let list_path = shellexpand::tilde("~/.config/mooce/list").into_owned();
+    let list_path = shellexpand::tilde("~/.config/mooce/").into_owned();
     list_path
 }

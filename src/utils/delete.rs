@@ -24,10 +24,10 @@ pub fn remove(line_i: usize, path: &String) -> std::io::Result<()> {
     Ok(())
 }
 
-pub fn rmr(target: &Option<String>) {
+pub fn rmr(target: &Option<String>, mpath: &String) {
     match target {
         Some(file) => {
-            let check = format!("~/.config/mooce/{}", file);
+            let check = format!("{}{}", mpath, file);
             let path_check = shellexpand::tilde(&check).into_owned();
             if !exist(&path_check) {
                 println!("The file didn't exist so we didn't need to do anything");
