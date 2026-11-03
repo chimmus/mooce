@@ -50,7 +50,7 @@ fn main() {
 
     let (mpath, chdef) = detect();
     rmr(&args.dell, &mpath);
-    make(&args.create);
+    make(&args.create, &mpath);
     let (list_r, path) = target(&args.target, &mpath);
 
     list_entries(args.list, &list_r);

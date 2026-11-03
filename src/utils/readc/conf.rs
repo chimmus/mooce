@@ -1,14 +1,16 @@
 use std::{fs};
 use super::super::misc::*;
+use super::env::*;
 
 pub fn find_default() -> (String, bool) {
+    let (mpath, _) = detect();
     let path = shellexpand::tilde("~/.config/mooce/mooce.conf").into_owned();
     if exist(&path) {
         let (list_r, success) = can_read(&path);
         if success {
             match read_default(&list_r) {
                 Some(dpath) => {
-                    let dpath = format!("~/.config/mooce/{}", dpath);
+                    let dpath = format!("{}{}", mpath, dpath);
                     let dpath = shellexpand::tilde(&dpath).into_owned();
                     if exist(&dpath) {
                         return (dpath, true)

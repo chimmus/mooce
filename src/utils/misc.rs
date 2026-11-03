@@ -24,11 +24,11 @@ pub fn target(target: &Option<String>, mpath: &String) -> (String, String) {
                 (list_r, path_check)
             } else {
                 println!("The file you requested didn't exist!");
-                do_default()
+                do_default(&mpath)
             }
         },
         None => {
-            do_default()
+            do_default(&mpath)
         },
     }
 }
@@ -37,23 +37,23 @@ pub fn check_dir (path: &String) -> bool {
     Path::new(path).is_dir()
 }
 
-fn do_default() -> (String, String) {
+fn do_default(mpath: &String) -> (String, String) {
     let (list_path, success) = find_default();
     if success {
         let list_r = fs::read_to_string(&list_path)
-            .expect("There is no file at ~/.config/mooce , please add a file there");
+            .expect("no file at specified location");
         (list_r, list_path)
     } else {
-        let list_path = shellexpand::tilde("~/.config/mooce/list").into_owned();
+        let list_path = shellexpand::tilde(&format!("{}list", mpath)).into_owned();
         if exist(&list_path) {
             let list_r = fs::read_to_string(&list_path)
-                .expect("There is no file at ~/.config/mooce called list , please add a file there");
+                .expect("There is no file called list at your specified directory , please add a file there");
             (list_r, list_path)
         } else {
-            make(&Some(String::from("list")));
-            let list_path = shellexpand::tilde("~/.config/mooce/list").into_owned();
+            make(&Some(String::from("list")), &mpath);
+            let list_path = shellexpand::tilde(&format!("{}list", mpath)).into_owned();
             let list_r = fs::read_to_string(&list_path)
-                .expect("There is no file at ~/.config/mooce called list , please add a file there");
+                .expect("There is no file called list at your specified directory , please add a file there");
             (list_r, list_path)
         }
     }
