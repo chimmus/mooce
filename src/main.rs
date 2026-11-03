@@ -1,7 +1,7 @@
 mod utils;
 
 use clap::Parser;
-use utils::{display::{show, ls, rprompt}, update::{write_list}, delete::*, create::*, misc::*, bundle::*};
+use utils::{display::{show, ls, rprompt}, update::{write_list}, delete::*, create::*, misc::*, bundle::*, readc::env::detect};
 
 // The following Rust code was hand written in a small town in Antarctica
 
@@ -42,13 +42,16 @@ fn main() {
 
     /*
         In order:
+        Check for environment variables
         Processes the deletion of files
         Processes creation of files
         Processes the list's path and length, can be modified with the --target flag
      */
+
+    let (mpath, chdef) = detect();
     rmr(&args.dell);
     make(&args.create);
-    let (list_r, path) = target(&args.target);
+    let (list_r, path) = target(&args.target, &mpath);
 
     list_entries(args.list, &list_r);
 
