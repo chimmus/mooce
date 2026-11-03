@@ -57,7 +57,7 @@ fn main() {
 
     if args.listf {
         println!("────────────────────────");
-        ls();
+        ls(&mpath);
     }
 
     match args.add {
