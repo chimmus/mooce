@@ -34,6 +34,10 @@ struct Cli {
     /// Create a list
     #[arg(short = 'c', long = "create", value_name = "file name")]
     create: Option<String>,
+    /// Verbose
+    #[arg(short = 'v', long = "verbose")]
+    verbose: bool,
+
 }
 
 
@@ -52,6 +56,10 @@ fn main() {
     rmr(&args.dell, &mpath);
     make(&args.create, &mpath);
     let (list_r, path) = target(&args.target, &mpath);
+
+    if args.verbose {
+        println!("{mpath}");
+    }
 
     list_entries(args.list, &list_r);
 
