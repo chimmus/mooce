@@ -1,7 +1,7 @@
-mod utils;
+pub mod utils;
 
 use clap::Parser;
-use utils::{display::{show, ls, rprompt}, update::{write_list}, delete::*, create::*, misc::*, bundle::*};
+use utils::{display::{show, ls, rprompt}, update::{write_list}, delete::*, create::*, misc::*, bundle::*, readc::env::detect};
 
 // The following Rust code was hand written in a small town in Antarctica
 
@@ -34,6 +34,10 @@ struct Cli {
     /// Create a list
     #[arg(short = 'c', long = "create", value_name = "file name")]
     create: Option<String>,
+    /// Verbose
+    #[arg(short = 'v', long = "verbose")]
+    verbose: bool,
+
 }
 
 
@@ -42,19 +46,26 @@ fn main() {
 
     /*
         In order:
+        Check for environment variables
         Processes the deletion of files
         Processes creation of files
         Processes the list's path and length, can be modified with the --target flag
      */
-    rmr(&args.dell);
-    make(&args.create);
-    let (list_r, path) = target(&args.target);
+
+    let (mpath, _) = detect();
+    rmr(&args.dell, &mpath);
+    make(&args.create, &mpath);
+    let (list_r, path) = target(&args.target, &mpath, args.verbose);
+
+    if args.verbose {
+        println!("Default path is: {mpath}");
+    }
 
     list_entries(args.list, &list_r);
 
     if args.listf {
         println!("────────────────────────");
-        ls();
+        ls(&mpath);
     }
 
     match args.add {

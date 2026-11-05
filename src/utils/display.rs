@@ -45,8 +45,8 @@ pub fn rprompt(ln: usize, path: &String) {
     }
 }
 
-pub fn ls() {
-    let path_c = shellexpand::tilde("~/.config/mooce/").into_owned();
+pub fn ls(mpath: &String) {
+    let path_c = shellexpand::tilde(&format!("{mpath}")).into_owned();
     for path in fs::read_dir(&path_c).expect("an error occured") {
         let path_e = path.expect("Could not read entry");
         let path_c = path_e.file_name().to_string_lossy().into_owned();
