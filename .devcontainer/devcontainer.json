@@ -1,0 +1,19 @@
+{
+    "build": {
+        "context": "..",
+        "dockerfile": "Dockerfile"
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+    "initializeCommand": "gh auth token | podman secret create --replace gh_token - && git config user.name | podman secret create --replace git_name - && git config user.email | podman secret create --replace git_email -",
+    "runArgs": [
+        "--secret", "gh_token,type=mount,target=gh_token",
+        "--secret", "git_name",
+        "--secret", "git_email"
+    ],
+    "postCreateCommand": "scripts/setup",
+    "remoteEnv": {
+        "REMOTE_CONTAINERS": "true"
+    }
+}
