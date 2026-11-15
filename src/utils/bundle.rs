@@ -5,7 +5,7 @@ use super::delete::*;
 /* A bundle of the display::show function combined with RNG, 
 this is used in the uh default utility
 of the program */
-pub fn default_rand(line_count: usize, path: &String) {
+pub fn default_rand(line_count: usize, path: &String, yes: bool, no: bool) {
     if 1 > line_count {
         println!("────────────────────────");
         println!("Your list is empty! Add topic to it with mooce -a <topic>");
@@ -15,7 +15,7 @@ pub fn default_rand(line_count: usize, path: &String) {
         let (output, success) = show(rand_line, &path);
         if success {
             println!("{}", output);
-            rprompt(rand_line, &path);
+            rprompt(rand_line, &path, yes, no);
 
         } else {
             eprintln!("ERROR! {output}");
@@ -31,8 +31,11 @@ pub fn delete_ln(line_number: usize, path: &String) {
             if line_number > (line_count - 1) {
                 eprintln!("{line_number} does not exist!");
             } else {
-                remove(line_number, &path).expect("Error occured while removing line");
-                println!("[{line_number}] has been removed"); 
+                if iremove(line_number, &path) {
+                    println!("[{line_number}] has been removed"); 
+                } else {
+                    eprintln!("error occured while removing [{line_number}]")
+                }
             }
         },
         Err(error) => {
