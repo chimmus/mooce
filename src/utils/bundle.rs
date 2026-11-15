@@ -18,7 +18,7 @@ pub fn default_rand(line_count: usize, path: &String) {
             rprompt(rand_line, &path);
 
         } else {
-            println!("ERROR! {output}");
+            eprintln!("ERROR! {output}");
         }
     }
 }
@@ -29,14 +29,14 @@ pub fn delete_ln(line_number: usize, path: &String) {
         Ok(list_r) => {
             let line_count = list_r.lines().count();
             if line_number > (line_count - 1) {
-                println!("{line_number} does not exist!");
+                eprintln!("{line_number} does not exist!");
             } else {
                 remove(line_number, &path).expect("Error occured while removing line");
-                println!("[{line_number}] has been removed"); // Not sure about how .expect works, 
+                println!("[{line_number}] has been removed"); 
             }
         },
         Err(error) => {
-            println!("Unexpected error occured {error}");
+            eprintln!("Unexpected error occured {error}");
         },
     }
 }

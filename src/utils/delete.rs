@@ -18,12 +18,13 @@ pub fn remove(line_i: usize, path: &String) -> std::io::Result<()> {
             std::fs::write(&path, out)?;
         },
         Err(error) => {
-            println!("An error occured {error}");
+            eprintln!("An error occured {error}");
         },
     }
     Ok(())
 }
 
+// remove file
 pub fn rmr(target: &Option<String>, mpath: &String) {
     match target {
         Some(file) => {
@@ -39,7 +40,7 @@ pub fn rmr(target: &Option<String>, mpath: &String) {
                 if success {
                     println!("File successfully deleted!");
                 } else {
-                    println!("Error occured")
+                    eprintln!("Error occured")
                 }
             }
         },

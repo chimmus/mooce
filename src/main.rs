@@ -113,7 +113,7 @@ fn main() {
                 rprompt(ln, &path);
 
             } else {
-                println!("ERROR! {output}");
+                eprintln!("ERROR! {output}");
             }
         },
         _ => {},
