@@ -1,5 +1,5 @@
 use std::{io, fs};
-use super::delete::remove;
+use super::delete::iremove;
 use super::misc::exist;
 
 pub fn show(ln: usize, path: &String) -> (String, bool) {
@@ -28,20 +28,33 @@ pub fn show(ln: usize, path: &String) -> (String, bool) {
 }
 
 
-pub fn rprompt(ln: usize, path: &String) {
-    println!("Complete this topic? (y/n)");
-    let mut prompt = String::new();
-    loop {
-        io::stdin().read_line(&mut prompt).expect("Failed to understand");
-        prompt = prompt.trim().to_lowercase();
-        if prompt.contains("y") {
-            remove(ln, &path).expect("An error occured");
-            println!("Removed topic with id {ln}");
-            break
-        } else {
-            println!("You can find this again, the id of this is {:?}", ln);
-            break
+pub fn rprompt(ln: usize, path: &String, yes: bool, no: bool) {
+    if !yes && !no || yes && no {
+        println!("Complete this topic? (y/n)");
+        let mut prompt = String::new();
+        loop {
+            io::stdin().read_line(&mut prompt).expect("Failed to understand");
+            prompt = prompt.trim().to_lowercase();
+            if prompt.contains("y") {
+                if iremove(ln, &path) {
+                    println!("Removed topic with id {ln}");
+                } else {
+                    eprintln!("Error occured with removing {ln}")
+                }
+                break
+            } else {
+                println!("You can find this again, the id of this is {:?}", ln);
+                break
+            }
         }
+    } else if yes && !no {
+        if iremove(ln, &path) {
+            println!("Auto-removed topic with id {ln}");
+        } else {
+            eprintln!("Error occured with removing {ln}")
+        }
+    } else if !yes && no {
+        println!("You can find this again, the id of this is {:?}", ln);
     }
 }
 

@@ -26,7 +26,7 @@ pub fn target(target: &Option<String>, mpath: &String, verbose: bool) -> (String
                 }
                 (list_r, path_check)
             } else {
-                println!("The file you requested didn't exist!");
+                eprintln!("The file you requested didn't exist!");
                 do_default(&mpath, verbose)
             }
         },
@@ -39,6 +39,8 @@ pub fn target(target: &Option<String>, mpath: &String, verbose: bool) -> (String
 pub fn check_dir (path: &String) -> bool {
     Path::new(path).is_dir()
 }
+
+// Todo: turn the read into a match
 
 fn do_default(mpath: &String, verbose: bool) -> (String, String) {
     let (list_path, success) = find_default();

@@ -34,6 +34,12 @@ struct Cli {
     /// Create a list
     #[arg(short = 'c', long = "create", value_name = "file name")]
     create: Option<String>,
+    /// Yes
+    #[arg(short = 'y', long = "yes")]
+    yes: bool,
+    /// No
+    #[arg(short = 'n', long = "no")]
+    no: bool,
     /// Verbose
     #[arg(short = 'v', long = "verbose")]
     verbose: bool,
@@ -88,7 +94,7 @@ fn main() {
             && !args.listf {
                 let line_count = list_r.lines().count();
                 // really inefficient ^
-                default_rand(line_count, &path);
+                default_rand(line_count, &path, args.yes, args.no);
             }
         },
     }
@@ -110,10 +116,10 @@ fn main() {
             let (output, success) = show(ln, &path);
             if success {
                 println!("{}", output);
-                rprompt(ln, &path);
+                rprompt(ln, &path, args.yes, args.no);
 
             } else {
-                println!("ERROR! {output}");
+                eprintln!("ERROR! {output}");
             }
         },
         _ => {},

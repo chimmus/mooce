@@ -1,10 +1,16 @@
 use std;
 use super::misc::exist;
 
-pub fn remove(line_i: usize, path: &String) -> std::io::Result<()> {
-    match  std::fs::read_to_string(&path) {
+pub fn iremove(line_i: usize, path: &String) -> bool {
+    match std::fs::read_to_string(&path) {
         Ok(_list_r) => {
-            let list_w = std::fs::read_to_string(&path)?;
+            let list_w = match std::fs::read_to_string(&path) {
+                Ok(write) => write,
+                Err(e) => {
+                    eprintln!("error occured: {e}");
+                    return false;
+                },
+            };
             let mut lines: Vec<String> = list_w.lines().map(String::from).collect();
 
             if line_i < lines.len() {
@@ -15,15 +21,16 @@ pub fn remove(line_i: usize, path: &String) -> std::io::Result<()> {
             if !out.is_empty() {
                 out.push('\n');
             }
-            std::fs::write(&path, out)?;
+            std::fs::write(&path, out).is_ok()
         },
         Err(error) => {
-            println!("An error occured {error}");
+            eprintln!("An error occured {error}");
+            false
         },
     }
-    Ok(())
 }
 
+// remove file
 pub fn rmr(target: &Option<String>, mpath: &String) {
     match target {
         Some(file) => {
@@ -39,7 +46,7 @@ pub fn rmr(target: &Option<String>, mpath: &String) {
                 if success {
                     println!("File successfully deleted!");
                 } else {
-                    println!("Error occured")
+                    eprintln!("Error occured")
                 }
             }
         },
