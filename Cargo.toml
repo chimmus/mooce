@@ -7,6 +7,10 @@ description = "An unintuitive list"
 repository = "https://github.com/chimmus/mooce"
 readme = "README.md"
 autolib = false
+exclude = [
+    ".devcontainer/**",
+    "scripts/**",
+]
 
 [dependencies]
 clap = { version = "4.6.7", features = ["derive"] }
